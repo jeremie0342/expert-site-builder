@@ -98,20 +98,20 @@ export function Footer() {
               <li className="flex items-start gap-3 text-sm">
                 <MapPin className="h-5 w-5 text-accent shrink-0 mt-0.5" />
                 <span className="text-primary-foreground/80">
-                  15 rue de la Précision<br />
-                  75008 Paris, France
+                  Godomey<br />
+                  Abomey-Calavi, Bénin
                 </span>
               </li>
               <li>
                 <a href="tel:+33123456789" className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors">
                   <Phone className="h-5 w-5 text-accent" />
-                  <span>01 23 45 67 89</span>
+                  <span>01 52 52 52 52</span>
                 </a>
               </li>
               <li>
                 <a href="mailto:contact@geoexpert.fr" className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors">
                   <Mail className="h-5 w-5 text-accent" />
-                  <span>contact@geoexpert.fr</span>
+                  <span>contact@geoexpert.com</span>
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/80">

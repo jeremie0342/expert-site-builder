@@ -25,11 +25,11 @@ export function Header() {
           <div className="flex items-center gap-6">
             <a href="tel:+33123456789" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Phone className="h-4 w-4" />
-              <span>01 23 45 67 89</span>
+              <span>01 52 52 52 52</span>
             </a>
             <span className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              <span>Paris & Île-de-France</span>
+              <span>Abomey-Calavi</span>
             </span>
           </div>
           <span className="text-primary-foreground/70">Lun-Ven : 8h30 - 18h00</span>

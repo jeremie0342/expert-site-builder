@@ -83,9 +83,9 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Adresse</h3>
                       <p className="text-muted-foreground">
-                        15 rue de la Précision
+                        Godomey
                         <br />
-                        75008 Paris, France
+                        Abomey-Calavi, Bénin
                       </p>
                     </div>
                   </div>
@@ -314,7 +314,7 @@ export default function Contact() {
           <div className="text-center">
             <MapPin className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
             <p className="text-muted-foreground">Carte interactive</p>
-            <p className="text-sm text-muted-foreground/70">15 rue de la Précision, 75008 Paris</p>
+            <p className="text-sm text-muted-foreground/70">Godomey, Abomey-Calavi Bénin</p>
           </div>
         </div>
       </section>
