@@ -1,73 +1,91 @@
-# Welcome to your Lovable project
+# Expert Site Builder
 
-## Project info
+Site web professionnel construit avec les technologies modernes pour offrir une expérience utilisateur optimale.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## A propos
 
-## How can I edit this code?
+Expert Site Builder est une application web complète offrant une présence en ligne professionnelle avec un design moderne et une interface utilisateur intuitive. Le site combine performance, accessibilité et réactivité pour garantir une excellente expérience sur tous les appareils.
 
-There are several ways of editing your application.
+## Technologies
 
-**Use Lovable**
+Le projet est construit avec :
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **Vite** - Outil de build ultra-rapide et serveur de développement
+- **React** - Bibliothèque JavaScript pour la construction d'interfaces utilisateur
+- **TypeScript** - Superset typé de JavaScript pour une meilleure qualité de code
+- **Tailwind CSS** - Framework CSS utilitaire pour des styles rapides et cohérents
+- **shadcn-ui** - Composants UI réutilisables et accessibles
 
-Changes made via Lovable will be committed automatically to this repo.
+## Installation
 
-**Use your preferred IDE**
+### Prérequis
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js (v16 ou supérieur)
+- npm ou yarn
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Configuration locale
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Cloner le dépôt
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Naviguer vers le dossier du projet
+cd expert-site-builder
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Installer les dépendances
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Démarrer le serveur de développement
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+L'application sera accessible à `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Développement
 
-**Use GitHub Codespaces**
+### Commandes disponibles
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+# Démarrer le serveur de développement
+npm run dev
 
-## What technologies are used for this project?
+# Construire pour la production
+npm run build
 
-This project is built with:
+# Prévisualiser la version construite
+npm run preview
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Exécuter les tests
+npm run test
+```
 
-## How can I deploy this project?
+## Structure du projet
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```
+src/
+  components/    # Composants React réutilisables
+  pages/         # Pages principales de l'application
+  styles/        # Fichiers de style global
+  App.tsx        # Composant racine
+  main.tsx       # Point d'entrée de l'application
+public/          # Ressources statiques
+package.json     # Dépendances et scripts
+tsconfig.json    # Configuration TypeScript
+vite.config.ts   # Configuration Vite
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Déploiement
 
-Yes, you can!
+Le site peut être déployé sur n'importe quelle plateforme supportant les applications Node.js/React :
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Construire pour la production : `npm run build`
+2. Le dossier `dist/` contient les fichiers prêts pour le déploiement
+3. Configurer votre hébergeur pour servir le fichier `dist/index.html` pour toutes les routes
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Contribution
+
+Les contributions sont bienvenues. Pour les changements majeurs, veuillez d'abord ouvrir une issue pour discuter des modifications proposées.
+
+## Licence
+
+Ce projet est propriétaire. Tous droits réservés.
