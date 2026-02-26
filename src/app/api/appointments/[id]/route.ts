@@ -45,25 +45,31 @@ export async function PUT(
   const formattedDate = formatDate(new Date(appointment.date));
 
   if (status === "confirmed") {
-    await sendEmail({
-      to: appointment.email,
-      subject: `Votre rendez-vous est confirmé — ${formattedDate} ${appointment.timeSlot}`,
-      html: `
-        <h2>Bonjour ${appointment.name},</h2>
-        <p>Votre rendez-vous est <strong>confirmé</strong>.</p>
-        <table style="border-collapse:collapse;margin:16px 0;">
-          <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Service</td><td>${appointment.service}</td></tr>
-          <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Date</td><td>${formattedDate}</td></tr>
-          <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Heure</td><td>${appointment.timeSlot}</td></tr>
-          ${appointment.agencyName ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Agence</td><td>${appointment.agencyName}</td></tr>` : ""}
-        </table>
-        ${adminNotes ? `<p><strong>Note :</strong> ${adminNotes}</p>` : ""}
-        <p>Nous vous attendons dans notre agence. Pour toute question, n'hésitez pas à nous contacter.</p>
-        <br>
-        <p>Cordialement,</p>
-        <p><strong>SCP GEOLUMIERE</strong><br>Géomètres-Experts Associés</p>
-      `,
-    });
+    try {
+      await sendEmail({
+        to: appointment.email,
+        subject: `Votre rendez-vous est confirmé — ${formattedDate} ${appointment.timeSlot}`,
+        html: `
+          <h2>Bonjour ${appointment.name},</h2>
+          <p>Votre rendez-vous est <strong>confirmé</strong>.</p>
+          <table style="border-collapse:collapse;margin:16px 0;">
+            <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Service</td><td>${appointment.service}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Date</td><td>${formattedDate}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Heure</td><td>${appointment.timeSlot}</td></tr>
+            ${appointment.agencyName ? `<tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Agence</td><td>${appointment.agencyName}</td></tr>` : ""}
+          </table>
+          ${adminNotes ? `<p><strong>Note :</strong> ${adminNotes}</p>` : ""}
+          <p>Nous vous attendons dans notre agence. Pour toute question, n'hésitez pas à nous contacter.</p>
+          <br>
+          <p>Cordialement,</p>
+          <p><strong>SCP GEOLUMIERE</strong><br>Géomètres-Experts Associés</p>
+        `,
+      });
+      console.log(`[Appointment] Email confirmation envoyé à ${appointment.email}`);
+    } catch (emailError) {
+      console.error("[Appointment] Échec envoi email confirmation:", emailError);
+      // On ne bloque pas la réponse — le statut est déjà mis à jour
+    }
   }
   // Aucun email envoyé en cas de refus (status === "cancelled")
 

@@ -12,7 +12,8 @@
       "Bash(npx tsx:*)",
       "Bash(npm:*)",
       "Bash(rm:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(sed:*)"
     ]
   }
 }
