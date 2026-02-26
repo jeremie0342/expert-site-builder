@@ -208,8 +208,8 @@ export async function Footer() {
         <div className="container-wide py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/60">
           <p>&copy; {new Date().getFullYear()} SCP GEOLUMIERE. Tous droits réservés.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary-foreground transition-colors">Mentions légales</a>
-            <a href="#" className="hover:text-primary-foreground transition-colors">Politique de confidentialité</a>
+            <Link href="/mentions-legales" className="hover:text-primary-foreground transition-colors">Mentions légales</Link>
+            <Link href="/confidentialite" className="hover:text-primary-foreground transition-colors">Politique de confidentialité</Link>
           </div>
         </div>
       </div>
