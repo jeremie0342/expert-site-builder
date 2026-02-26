@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(cd:*)",
+      "Bash(tail:*)",
+      "Bash(cd /c/flemart/Code/expert-site-builder && npx next build 2>&1)",
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm:*)",
+      "Bash(rm:*)",
+      "Bash(git:*)"
+    ]
+  }
+}
