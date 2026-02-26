@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { sendEmails } from "@/lib/resend";
+import dbConnect from "@/lib/mongodb";
+import ContactInfo from "@/models/ContactInfo";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Le nom est requis"),
@@ -15,11 +17,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = contactSchema.parse(body);
 
+    // Récupère les emails admin depuis ContactInfo
+    await dbConnect();
+    const ci = await ContactInfo.findOne().lean() as any;
+    const adminEmails: string[] = ci?.globalEmails?.filter(Boolean).length
+      ? ci.globalEmails
+      : ["scpgeolumiere@gmail.com"];
+
     await sendEmails([
-      // Notification à SCP GEOLUMIERE
+      // Notification aux admins
       {
-        to: "scpgeolumiere@gmail.com",
-        subject: `Nouvelle demande de devis - ${data.service}`,
+        to: adminEmails,
+        subject: `Nouvelle demande de devis — ${data.service}`,
         html: `
           <h2>Nouvelle demande de contact</h2>
           <p><strong>Nom :</strong> ${data.name}</p>
@@ -33,14 +42,14 @@ export async function POST(req: NextRequest) {
       // Confirmation au visiteur
       {
         to: data.email,
-        subject: "Confirmation de votre demande - SCP GEOLUMIERE",
+        subject: "Confirmation de votre demande — SCP GEOLUMIERE",
         html: `
           <h2>Merci pour votre demande, ${data.name} !</h2>
           <p>Nous avons bien reçu votre message concernant : <strong>${data.service}</strong></p>
           <p>Notre équipe vous recontactera dans les plus brefs délais.</p>
           <br>
           <p>Cordialement,</p>
-          <p><strong>SCP GEOLUMIERE</strong><br>Géomètres-Experts Associés<br>Godomey, Abomey-Calavi, Bénin<br>Tél : 64 62 73 35</p>
+          <p><strong>SCP GEOLUMIERE</strong><br>Géomètres-Experts Associés<br>Godomey, Abomey-Calavi, Bénin</p>
         `,
       },
     ]);

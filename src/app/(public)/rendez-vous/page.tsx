@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -31,6 +30,7 @@ const SERVICES = [
   "Évaluations foncières et immobilières",
   "Formations",
   "Recherche géomatique",
+  "Autre",
 ];
 
 type Step = "agency" | "datetime" | "info" | "success";
@@ -81,6 +81,7 @@ export default function RendezVousPage() {
     service: "",
     message: "",
   });
+  const [customService, setCustomService] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   // Success
@@ -143,12 +144,18 @@ export default function RendezVousPage() {
     if (!selectedDate || !selectedSlot || !selectedAgency) return;
 
     setSubmitting(true);
+    const resolvedService =
+      formData.service === "Autre" && customService.trim()
+        ? `Autre — ${customService.trim()}`
+        : formData.service;
+
     try {
       const res = await fetch("/api/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          service: resolvedService,
           date: format(selectedDate, "yyyy-MM-dd"),
           timeSlot: selectedSlot,
           agencyId: selectedAgency._id,
@@ -193,6 +200,7 @@ export default function RendezVousPage() {
     setAvailableSlots([]);
     setAllSlots([]);
     setFormData({ name: "", email: "", phone: "", service: "", message: "" });
+    setCustomService("");
   };
 
   const stepIndex = { agency: 0, datetime: 1, info: 2, success: 3 };
@@ -273,8 +281,9 @@ export default function RendezVousPage() {
               </h2>
 
               {loadingAgencies ? (
-                <div className="space-y-3">
-                  {[1, 2].map((i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+                <div className="flex flex-col items-center justify-center py-16">
+                  <Loader2 className="h-10 w-10 animate-spin text-accent mb-4" />
+                  <p className="text-sm text-muted-foreground">Chargement des agences…</p>
                 </div>
               ) : agencies.length === 0 ? (
                 <p className="text-muted-foreground text-sm">
@@ -357,17 +366,23 @@ export default function RendezVousPage() {
                 Choisissez une date
               </h2>
 
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-8">
                 {/* Calendar */}
-                <div>
+                <div className="w-full">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     disabled={isDateDisabled}
                     locale={fr}
-                    className="rounded-xl border border-border"
+                    className="rounded-xl border border-border w-full"
                     classNames={{
+                      month: "space-y-4 w-full",
+                      head_row: "flex w-full",
+                      head_cell: "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] text-center",
+                      row: "flex w-full mt-2",
+                      cell: "flex-1 h-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                      day: "inline-flex items-center justify-center rounded-md text-sm ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 w-full p-0 font-normal aria-selected:opacity-100",
                       day_selected: "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground",
                       day_today: "bg-muted font-bold",
                     }}
@@ -378,7 +393,7 @@ export default function RendezVousPage() {
                 </div>
 
                 {/* Time slots */}
-                <div>
+                <div className="w-full">
                   <h3 className="font-medium mb-4 flex items-center gap-2">
                     <Clock className="h-5 w-5 text-accent" />
                     {selectedDate
@@ -391,17 +406,16 @@ export default function RendezVousPage() {
                       Cliquez sur une date pour voir les créneaux disponibles.
                     </p>
                   ) : loadingSlots ? (
-                    <div className="grid grid-cols-3 gap-2">
-                      {Array.from({ length: 8 }).map((_, i) => (
-                        <Skeleton key={i} className="h-10 rounded-lg" />
-                      ))}
+                    <div className="flex flex-col items-center justify-center py-10">
+                      <Loader2 className="h-8 w-8 animate-spin text-accent mb-3" />
+                      <p className="text-sm text-muted-foreground">Chargement des créneaux…</p>
                     </div>
                   ) : allSlots.length === 0 ? (
                     <p className="text-sm text-muted-foreground mt-4 p-3 bg-muted rounded-lg">
                       Aucun créneau disponible pour cette date. Veuillez choisir un autre jour.
                     </p>
                   ) : (
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-2">
                       {allSlots.map((slot) => {
                         const isAvailable = availableSlots.includes(slot);
                         const isSelected = selectedSlot === slot;
@@ -520,7 +534,10 @@ export default function RendezVousPage() {
                     <Select
                       required
                       value={formData.service}
-                      onValueChange={(v) => setFormData({ ...formData, service: v })}
+                      onValueChange={(v) => {
+                        setFormData({ ...formData, service: v });
+                        if (v !== "Autre") setCustomService("");
+                      }}
                     >
                       <SelectTrigger id="service">
                         <SelectValue placeholder="Sélectionnez un service" />
@@ -531,6 +548,15 @@ export default function RendezVousPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {formData.service === "Autre" && (
+                      <Input
+                        value={customService}
+                        onChange={(e) => setCustomService(e.target.value)}
+                        placeholder="Précisez votre besoin…"
+                        required
+                        className="mt-2"
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -554,22 +580,28 @@ export default function RendezVousPage() {
                     <ChevronLeft className="h-4 w-4 mr-2" />
                     Retour
                   </Button>
-                  <Button
-                    type="submit"
-                    variant="hero"
-                    size="lg"
-                    disabled={submitting || !formData.name || !formData.email || !formData.service}
-                    className="flex-1"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Envoi en cours…
-                      </>
-                    ) : (
-                      "Confirmer la demande"
-                    )}
-                  </Button>
+                  {submitting ? (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="lg"
+                      disabled
+                      className="flex-1 cursor-not-allowed"
+                    >
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Envoi en cours…
+                    </Button>
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="hero"
+                      size="lg"
+                      disabled={!formData.name || !formData.email || !formData.service || (formData.service === "Autre" && !customService.trim())}
+                      className="flex-1"
+                    >
+                      Confirmer la demande
+                    </Button>
+                  )}
                 </div>
               </form>
             </div>
@@ -584,9 +616,13 @@ export default function RendezVousPage() {
               <h2 className="font-serif text-3xl font-bold mb-3">
                 Demande envoyée !
               </h2>
-              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                Votre demande de rendez-vous a bien été reçue. Vous allez recevoir
-                un email de confirmation. Notre équipe vous contactera rapidement.
+              <p className="text-muted-foreground mb-4 max-w-md mx-auto">
+                Votre demande a bien été reçue. Si elle est acceptée, vous recevrez
+                un email de confirmation de notre équipe.
+              </p>
+              <p className="text-sm text-muted-foreground/80 mb-8 max-w-md mx-auto bg-muted/50 rounded-lg px-4 py-3">
+                Sans réponse de notre part, veuillez considérer votre demande comme non retenue
+                et n&apos;hésitez pas à nous contacter directement.
               </p>
 
               <div className="bg-muted/50 rounded-xl p-6 text-left max-w-sm mx-auto mb-8">

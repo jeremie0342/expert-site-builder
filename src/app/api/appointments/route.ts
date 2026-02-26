@@ -52,9 +52,10 @@ export async function GET(req: NextRequest) {
     filter.date = { $gte: start, $lte: end };
   }
 
-  const appointments = await Appointment.find(filter)
+  const raw = await Appointment.find(filter)
     .populate("agencyId", "name")
     .sort({ date: 1, timeSlot: 1 });
+  const appointments = JSON.parse(JSON.stringify(raw));
   return NextResponse.json({ appointments });
 }
 
